@@ -2,8 +2,11 @@ import {projectState} from "./ProjectState.js";
 import {Project, ProjectState} from "./types/ProjectTypes.js";
 import BaseComponent from "./BaseComponent.js"
 import SingleProject from "./SingleProject.js";
+import {DragTarget} from "./types/DragDropTypes.js";
+import {autobind} from "./decorators/index.js";
 
-export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLElement> {
+export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLElement>
+    implements DragTarget {
     assignedProjects: Project[] = [];
 
     constructor(private type: ProjectState) {
@@ -17,6 +20,7 @@ export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLEleme
         this.configure();
         this.renderContent();
     }
+
     private getProjectListId() {
         return `${ProjectState[this.type]}-project-list`;
     }
@@ -27,6 +31,10 @@ export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLEleme
     }
 
     configure() {
+        this.element.addEventListener('dragover', this.dragOverHandler);
+        this.element.addEventListener('dragleave', this.dragLeaveHandler);
+        this.element.addEventListener('drop', this.dropHandler);
+
         projectState.addListener((projects: Project[]) => {
             this.assignedProjects = projects.filter(project => {
                 return project.status === this.type;
@@ -34,6 +42,21 @@ export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLEleme
             this.renderProjects();
         });
     }
+    @autobind
+    dropHandler(event: DragEvent) {
+
+    }
+    @autobind
+    dragOverHandler(event: DragEvent) {
+        const listEl = this.element.querySelector('ul')!;
+        listEl.classList.add('droppable');
+    }
+    @autobind
+    dragLeaveHandler(event: DragEvent) {
+        const listEl = this.element.querySelector('ul')!;
+        listEl.classList.remove('droppable');
+    }
+
     private renderProjects(): void {
         const listElement = <HTMLUListElement>document.getElementById(this.getProjectListId());
         listElement.innerHTML = "";
