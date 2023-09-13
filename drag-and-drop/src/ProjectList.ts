@@ -1,6 +1,7 @@
 import {projectState} from "./ProjectState.js";
 import {Project, ProjectState} from "./types/ProjectTypes.js";
 import BaseComponent from "./BaseComponent.js"
+import SingleProject from "./SingleProject.js";
 
 export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLElement> {
     assignedProjects: Project[] = [];
@@ -37,9 +38,7 @@ export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLEleme
         const listElement = <HTMLUListElement>document.getElementById(this.getProjectListId());
         listElement.innerHTML = "";
         for (const project of this.assignedProjects) {
-            const listItem = <HTMLLIElement>document.createElement('li');
-            listItem.textContent = project.title;
-            listElement.appendChild(listItem)
+            new SingleProject(this.element.querySelector('ul')!.id, project);
         }
     }
 }
