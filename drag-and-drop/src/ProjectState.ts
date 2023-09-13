@@ -20,6 +20,7 @@ class ProjectState {
         }
         this.projects.push(newProject);
         for(const listenerFn of this.listeners) {
+            // pass a brand-new copy of projects
             listenerFn(this.projects.slice());
         }
     }

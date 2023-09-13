@@ -15,13 +15,19 @@ export default class ProjectList {
         this.element.id = `${this.type}-projects`;
         projectState.addListener((projects: any[]) => {
             this.assignedProjects = projects;
-        })
+            this.renderProjects();
+        });
         this.attach();
         this.renderContent();
     }
 
-    private onAddProject() {
-
+    private renderProjects(): void {
+        const listElement = <HTMLUListElement>document.getElementById(`${this.type}-project-list`);
+        for (const project of this.assignedProjects) {
+            const listItem = <HTMLLIElement>document.createElement('li');
+            listItem.textContent = project.title;
+            listElement.appendChild(listItem)
+        }
     }
 
     private renderContent() {
