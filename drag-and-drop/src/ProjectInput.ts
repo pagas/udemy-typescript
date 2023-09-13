@@ -1,4 +1,5 @@
 import {projectState} from "./ProjectState.js";
+import BaseComponent from "./BaseComponent.js"
 
 interface Validatable {
     value: string | number
@@ -47,33 +48,31 @@ function autobind(target: any, methodName: string, descriptor: PropertyDescripto
 
 
 // ProjectInput Class
-export default class ProjectInput {
-    templateElement: HTMLTemplateElement;
-    hostElement: HTMLDivElement;
-    element: HTMLFormElement;
+export default class ProjectInput extends BaseComponent<HTMLDivElement,HTMLFormElement>{
     titleInputElement: HTMLInputElement;
     descriptionInputElement: HTMLInputElement;
     peopleInputElement: HTMLInputElement;
 
     constructor() {
-        this.templateElement = <HTMLTemplateElement>document.getElementById("project-input");
-        this.hostElement = <HTMLDivElement>document.getElementById("app");
-
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = <HTMLFormElement>importedNode.firstElementChild;
-        this.element.id = "user-input";
+        super(
+            "project-input",
+            "app",
+            true,
+            "user-input"
+        )
 
         this.titleInputElement = <HTMLInputElement>this.element.querySelector("#title");
         this.descriptionInputElement = <HTMLInputElement>this.element.querySelector("#description");
         this.peopleInputElement = <HTMLInputElement>this.element.querySelector("#people");
 
         this.configure();
-        this.attach();
     }
 
-    private attach() {
-        this.hostElement.insertAdjacentElement('beforebegin', this.element);
+    configure() {
+        this.element.addEventListener('submit', this.submitHandler)
     }
+
+    renderContent() {}
 
     private gatherUserInput(): [string, string, number] | void {
         const enteredTitle = this.titleInputElement.value;
@@ -123,9 +122,5 @@ export default class ProjectInput {
         this.titleInputElement.value = '';
         this.descriptionInputElement.value = '';
         this.peopleInputElement.value = '';
-    }
-
-    private configure() {
-        this.element.addEventListener('submit', this.submitHandler)
     }
 }

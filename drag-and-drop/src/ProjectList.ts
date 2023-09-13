@@ -1,33 +1,38 @@
 import {projectState} from "./ProjectState.js";
 import {Project, ProjectState} from "./types/ProjectTypes.js";
+import BaseComponent from "./BaseComponent.js"
 
-export default class ProjectList {
-    templateElement: HTMLTemplateElement;
-    hostElement: HTMLDivElement;
-    element: HTMLElement;
+export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLElement> {
     assignedProjects: Project[] = [];
 
     constructor(private type: ProjectState) {
-        this.templateElement = <HTMLTemplateElement>document.getElementById("project-list");
-        this.hostElement = <HTMLDivElement>document.getElementById("app");
+        super(
+            "project-list",
+            "app",
+            false,
+            `${ProjectState[type]}-projects`,
+        )
 
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = <HTMLElement>importedNode.firstElementChild;
-        this.element.id = `${ProjectState[this.type]}-projects`;
-
-        projectState.addListener((projects: Project[]) => {
-            this.assignedProjects = projects.filter(project => {
-                return project.status === this.type;
-            })
-            this.renderProjects();
-        });
-        this.attach();
+        this.configure();
         this.renderContent();
     }
     private getProjectListId() {
         return `${ProjectState[this.type]}-project-list`;
     }
 
+    renderContent() {
+        this.element.querySelector('ul')!.id = this.getProjectListId();
+        this.element.querySelector('h2')!.textContent = `${ProjectState[this.type].toUpperCase()} Projects`;
+    }
+
+    configure() {
+        projectState.addListener((projects: Project[]) => {
+            this.assignedProjects = projects.filter(project => {
+                return project.status === this.type;
+            })
+            this.renderProjects();
+        });
+    }
     private renderProjects(): void {
         const listElement = <HTMLUListElement>document.getElementById(this.getProjectListId());
         listElement.innerHTML = "";
@@ -36,14 +41,5 @@ export default class ProjectList {
             listItem.textContent = project.title;
             listElement.appendChild(listItem)
         }
-    }
-
-    private renderContent() {
-        this.element.querySelector('ul')!.id = this.getProjectListId();
-        this.element.querySelector('h2')!.textContent = `${ProjectState[this.type].toUpperCase()} Projects`;
-    }
-
-    public attach() {
-        this.hostElement.insertAdjacentElement('beforeend', this.element);
     }
 }
