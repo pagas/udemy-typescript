@@ -1,10 +1,11 @@
 import {projectState} from "./ProjectState.js";
+import {Project} from "./types/ProjectTypes.js";
 
 export default class ProjectList {
     templateElement: HTMLTemplateElement;
     hostElement: HTMLDivElement;
     element: HTMLElement;
-    assignedProjects: any[] = [];
+    assignedProjects: Project[] = [];
 
     constructor(private type: 'active' | 'finished') {
         this.templateElement = <HTMLTemplateElement>document.getElementById("project-list");
@@ -13,7 +14,7 @@ export default class ProjectList {
         const importedNode = document.importNode(this.templateElement.content, true);
         this.element = <HTMLElement>importedNode.firstElementChild;
         this.element.id = `${this.type}-projects`;
-        projectState.addListener((projects: any[]) => {
+        projectState.addListener((projects: Project[]) => {
             this.assignedProjects = projects;
             this.renderProjects();
         });

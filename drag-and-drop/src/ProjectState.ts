@@ -1,6 +1,12 @@
+import {Project,
+    ProjectState as ProjectStateEnum,
+    ProjectStateListener
+} from "./types/ProjectTypes.js";
+
+
 class ProjectState {
-    private projects: any[] = [];
-    private listeners: any[] = [];
+    private projects: Project[] = [];
+    private listeners: ProjectStateListener[] = [];
     private static instance: ProjectState;
     private constructor() {}
 
@@ -12,12 +18,13 @@ class ProjectState {
     }
 
     public addProject(title: string, description:string, numOfPeople:number){
-        const newProject = {
-            id: Math.random().toString(),
-            title: title,
-            description: description,
-            numOfPeople: numOfPeople
-        }
+        const newProject = new Project(
+            Math.random().toString(),
+            title,
+            description,
+            numOfPeople,
+            ProjectStateEnum.active
+        )
         this.projects.push(newProject);
         for(const listenerFn of this.listeners) {
             // pass a brand-new copy of projects
@@ -25,7 +32,7 @@ class ProjectState {
         }
     }
 
-    public addListener(listenerFunction: Function) {
+    public addListener(listenerFunction: ProjectStateListener) {
         this.listeners.push(listenerFunction)
     }
 }
