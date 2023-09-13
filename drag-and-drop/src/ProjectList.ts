@@ -44,12 +44,18 @@ export default class ProjectList extends BaseComponent<HTMLDivElement, HTMLEleme
     }
     @autobind
     dropHandler(event: DragEvent) {
+        const projectId = event.dataTransfer!.getData('text/plain');
+        projectState.moveProject(projectId, this.type);
 
     }
     @autobind
     dragOverHandler(event: DragEvent) {
-        const listEl = this.element.querySelector('ul')!;
-        listEl.classList.add('droppable');
+        if(event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
+            // to allow drop event to happen
+            event.preventDefault();
+            const listEl = this.element.querySelector('ul')!;
+            listEl.classList.add('droppable');
+        }
     }
     @autobind
     dragLeaveHandler(event: DragEvent) {

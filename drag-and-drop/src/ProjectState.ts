@@ -18,7 +18,7 @@ class ProjectState extends BaseState<Project>{
         return this.instance;
     }
 
-    public addProject(title: string, description:string, numOfPeople:number){
+    addProject(title: string, description:string, numOfPeople:number){
         const newProject = new Project(
             Math.random().toString(),
             title,
@@ -27,6 +27,19 @@ class ProjectState extends BaseState<Project>{
             ProjectStateEnum.active
         )
         this.projects.push(newProject);
+        this.updateListeners();
+    }
+
+    moveProject(id: string, status: ProjectStateEnum) {
+        const foundProject = this.projects.find(project => project.id === id);
+        if (foundProject && foundProject.status !== status) {
+            foundProject.status = status;
+            this.updateListeners();
+        }
+
+    }
+
+    private updateListeners() {
         for(const listenerFn of this.listeners) {
             // pass a brand-new copy of projects
             listenerFn(this.projects.slice());

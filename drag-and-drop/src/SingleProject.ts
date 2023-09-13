@@ -39,7 +39,8 @@ export default class SingleProject extends BaseComponent<HTMLUListElement, HTMLL
     }
     @autobind
     dragStartHandler(event: DragEvent) {
-        console.log('dragStartHandler', event);
+        event.dataTransfer!.setData('text/plain', this.project.id);
+        event.dataTransfer!.effectAllowed = 'move';
     }
     @autobind
     dragEndHandler(event: DragEvent) {
