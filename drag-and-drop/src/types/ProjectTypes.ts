@@ -12,5 +12,3 @@ export class Project {
     }
 }
 
-
-export type ProjectStateListener = (items:Project[]) => void

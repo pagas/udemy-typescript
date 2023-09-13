@@ -1,14 +1,15 @@
 import {Project,
     ProjectState as ProjectStateEnum,
-    ProjectStateListener
 } from "./types/ProjectTypes.js";
+import BaseState from "./BaseState.js";
 
 
-class ProjectState {
+class ProjectState extends BaseState<Project>{
     private projects: Project[] = [];
-    private listeners: ProjectStateListener[] = [];
     private static instance: ProjectState;
-    private constructor() {}
+    private constructor() {
+        super();
+    }
 
     static getInstance(): ProjectState {
         if (!this.instance) {
@@ -30,10 +31,6 @@ class ProjectState {
             // pass a brand-new copy of projects
             listenerFn(this.projects.slice());
         }
-    }
-
-    public addListener(listenerFunction: ProjectStateListener) {
-        this.listeners.push(listenerFunction)
     }
 }
 const projectState = ProjectState.getInstance();
