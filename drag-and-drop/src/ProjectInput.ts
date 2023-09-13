@@ -1,5 +1,6 @@
 import {projectState} from "./ProjectState.js";
-import BaseComponent from "./BaseComponent.js"
+import BaseComponent from "./BaseComponent.js";
+import {autobind} from "./decorators/index.js";
 
 interface Validatable {
     value: string | number
@@ -32,20 +33,6 @@ function validate(validatableInput: Validatable) {
     }
     return isValid;
 }
-
-// autobind decorator
-function autobind(target: any, methodName: string, descriptor: PropertyDescriptor) {
-    const originalMethod = descriptor.value;
-    const adjustedDescriptor: PropertyDescriptor = {
-        configurable: true,
-        get() {
-            const boundFn = originalMethod.bind(this);
-            return boundFn;
-        }
-    }
-    return adjustedDescriptor;
-}
-
 
 // ProjectInput Class
 export default class ProjectInput extends BaseComponent<HTMLDivElement,HTMLFormElement>{
