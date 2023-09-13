@@ -14,6 +14,7 @@ export default class ProjectList {
         const importedNode = document.importNode(this.templateElement.content, true);
         this.element = <HTMLElement>importedNode.firstElementChild;
         this.element.id = `${ProjectState[this.type]}-projects`;
+
         projectState.addListener((projects: Project[]) => {
             this.assignedProjects = projects.filter(project => {
                 return project.status === this.type;
@@ -23,9 +24,12 @@ export default class ProjectList {
         this.attach();
         this.renderContent();
     }
+    private getProjectListId() {
+        return `${ProjectState[this.type]}-project-list`;
+    }
 
     private renderProjects(): void {
-        const listElement = <HTMLUListElement>document.getElementById(`${ProjectState[this.type]}-project-list`);
+        const listElement = <HTMLUListElement>document.getElementById(this.getProjectListId());
         listElement.innerHTML = "";
         for (const project of this.assignedProjects) {
             const listItem = <HTMLLIElement>document.createElement('li');
@@ -35,8 +39,7 @@ export default class ProjectList {
     }
 
     private renderContent() {
-        const listId = `${ProjectState[this.type]}-project-list`;
-        this.element.querySelector('ul')!.id = listId;
+        this.element.querySelector('ul')!.id = this.getProjectListId();
         this.element.querySelector('h2')!.textContent = `${ProjectState[this.type].toUpperCase()} Projects`;
     }
 
