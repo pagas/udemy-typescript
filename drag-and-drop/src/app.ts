@@ -11,9 +11,10 @@
 
 import ProjectInput from "./ProjectInput.js";
 import ProjectList from "./ProjectList.js";
+import {ProjectState} from "./types/ProjectTypes.js";
 
 const projectInput = new ProjectInput();
-const activeProject = new ProjectList('active');
-const finishedProject = new ProjectList('finished');
+const activeProject = new ProjectList(ProjectState.active);
+const finishedProject = new ProjectList(ProjectState.finished);
 
 
