@@ -1,6 +1,6 @@
-import {ProjectInput} from "./components/project-input.js";
-import {ProjectList} from "./components/project-list.js";
-import {ProjectStateEnum} from "./models/project.js";
+import {ProjectInput} from "./components/project-input";
+import {ProjectList} from "./components/project-list";
+import {ProjectStateEnum} from "./models/project";
 
 
 const projectInput = new ProjectInput();

@@ -1,5 +1,5 @@
-import {BaseState} from "./base-state.js";
-import {Project, ProjectStateEnum} from "../models/project.js";
+import {BaseState} from "./base-state";
+import {Project, ProjectStateEnum} from "../models/project";
 
 class ProjectState extends BaseState<Project> {
     private projects: Project[] = [];

@@ -5,16 +5,21 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p .",
+    "build-ts": "tsc -p .",
+    "build": "webpack",
     "start": "lite-server",
-    "dev": "concurrently --kill-others \"npm run build -- -w\" \"lite-server\""
+    "dev": "concurrently --kill-others \"npm run build-ts -- -w\" \"lite-server\""
   },
   "author": "Maximilian Schwarzmüller",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.0.1",
     "lite-server": "^2.5.4",
-    "typescript": "^5.0.4"
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.2.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-server": "^0.1.2"
   },
   "dependencies": {
     "uuid": "^9.0.0"
