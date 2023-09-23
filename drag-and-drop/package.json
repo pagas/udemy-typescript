@@ -6,20 +6,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-ts": "tsc -p .",
-    "build": "webpack",
-    "start": "lite-server",
+    "build": "webpack --config webpack.config.prod.js",
+    "start": "webpack-dev-server",
     "dev": "concurrently --kill-others \"npm run build-ts -- -w\" \"lite-server\""
   },
   "author": "Maximilian Schwarzmüller",
   "license": "ISC",
   "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
     "concurrently": "^8.0.1",
     "lite-server": "^2.5.4",
     "ts-loader": "^9.4.4",
     "typescript": "^5.2.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "webpack-server": "^0.1.2"
+    "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
     "uuid": "^9.0.0"
