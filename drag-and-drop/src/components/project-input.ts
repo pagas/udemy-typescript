@@ -1,84 +1,82 @@
-/// <reference path="base-component.ts" />
-/// <reference path="../decorators/autobind.ts" />
-/// <reference path="../util/validation.ts" />
+import {autobind} from "../decorators/autobind.js";
+import {BaseComponent} from "./base-component.js";
+import {Validatable, validate} from "../util/validation.js";
+import {projectState} from "../state/project-state.js";
 
-namespace App {
+export class ProjectInput extends BaseComponent<HTMLDivElement, HTMLFormElement> {
+    titleInputElement: HTMLInputElement;
+    descriptionInputElement: HTMLInputElement;
+    peopleInputElement: HTMLInputElement;
 
-    export class ProjectInput extends BaseComponent<HTMLDivElement, HTMLFormElement> {
-        titleInputElement: HTMLInputElement;
-        descriptionInputElement: HTMLInputElement;
-        peopleInputElement: HTMLInputElement;
+    constructor() {
+        super(
+            "project-input",
+            "app",
+            true,
+            "user-input"
+        )
 
-        constructor() {
-            super(
-                "project-input",
-                "app",
-                true,
-                "user-input"
-            )
+        this.titleInputElement = <HTMLInputElement>this.element.querySelector("#title");
+        this.descriptionInputElement = <HTMLInputElement>this.element.querySelector("#description");
+        this.peopleInputElement = <HTMLInputElement>this.element.querySelector("#people");
 
-            this.titleInputElement = <HTMLInputElement>this.element.querySelector("#title");
-            this.descriptionInputElement = <HTMLInputElement>this.element.querySelector("#description");
-            this.peopleInputElement = <HTMLInputElement>this.element.querySelector("#people");
+        this.configure();
+    }
 
-            this.configure();
+    configure() {
+        this.element.addEventListener('submit', this.submitHandler)
+    }
+
+    renderContent() {
+    }
+
+    private gatherUserInput(): [string, string, number] | void {
+        const enteredTitle = this.titleInputElement.value;
+        const enteredDescription = this.descriptionInputElement.value;
+        const enteredPeople = +this.peopleInputElement.value;
+
+        const titleValidatable: Validatable = {
+            value: enteredTitle,
+            required: true
         }
 
-        configure() {
-            this.element.addEventListener('submit', this.submitHandler)
+        const descriptionValidatable: Validatable = {
+            value: enteredDescription,
+            required: true,
+            minLength: 5
         }
 
-        renderContent() {
+        const peopleValidatable: Validatable = {
+            value: enteredPeople,
+            required: true,
+            min: 1,
+            max: 5
         }
 
-        private gatherUserInput(): [string, string, number] | void {
-            const enteredTitle = this.titleInputElement.value;
-            const enteredDescription = this.descriptionInputElement.value;
-            const enteredPeople = +this.peopleInputElement.value;
-
-            const titleValidatable: Validatable = {
-                value: enteredTitle,
-                required: true
-            }
-
-            const descriptionValidatable: Validatable = {
-                value: enteredDescription,
-                required: true,
-                minLength: 5
-            }
-
-            const peopleValidatable: Validatable = {
-                value: enteredPeople,
-                required: true,
-                min: 1,
-                max: 5
-            }
-
-            if (!validate(titleValidatable) ||
-                !validate(peopleValidatable) ||
-                !validate(descriptionValidatable)) {
-                alert('Invalid input please try again');
-                return;
-            } else {
-                return [enteredTitle, enteredDescription, +enteredPeople];
-            }
+        if (!validate(titleValidatable) ||
+            !validate(peopleValidatable) ||
+            !validate(descriptionValidatable)) {
+            alert('Invalid input please try again');
+            return;
+        } else {
+            return [enteredTitle, enteredDescription, +enteredPeople];
         }
+    }
 
-        @autobind
-        private submitHandler(event: Event) {
-            event.preventDefault();
-            const userInput = this.gatherUserInput();
-            if (Array.isArray(userInput)) {
-                const [title, description, people] = userInput;
-                projectState.addProject(title, description, people);
-                this.clearInputs();
-            }
+    @autobind
+    private submitHandler(event: Event) {
+        event.preventDefault();
+        const userInput = this.gatherUserInput();
+        if (Array.isArray(userInput)) {
+            const [title, description, people] = userInput;
+            projectState.addProject(title, description, people);
+            this.clearInputs();
         }
+    }
 
-        private clearInputs() {
-            this.titleInputElement.value = '';
-            this.descriptionInputElement.value = '';
-            this.peopleInputElement.value = '';
-        }
+    private clearInputs() {
+        this.titleInputElement.value = '';
+        this.descriptionInputElement.value = '';
+        this.peopleInputElement.value = '';
     }
 }
