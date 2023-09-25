@@ -16,3 +16,7 @@ form {
   text-align: center;
   margin: 2rem auto;
 }
+
+.hidden {
+  display: none;
+}
