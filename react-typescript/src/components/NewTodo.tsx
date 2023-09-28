@@ -19,7 +19,7 @@ const NewTodo = ({ onAddTodo }: NewTodoProps) => {
     }
 
     return <form onSubmit={todoSubmitHandler}>
-        <div>
+        <div className='form-control'>
             <label htmlFor="todo-text">Todo Text</label>
             <input id="todo-text" type="text" ref={textInputRef} />
         </div>
