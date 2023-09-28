@@ -1,9 +1,5 @@
 import React from 'react';
-
-type Todo = {
-    id: string
-    text: string
-}
+import { Todo } from '../todo.model';
 
 type TodoProps = {
     todos: Todo[]
