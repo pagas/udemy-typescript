@@ -6,7 +6,7 @@ import { Todo } from './todo.model';
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const todoAddHandler = (text: string) => {
-    setTodos([...todos, {id: Math.random().toString(), text: text}])
+    setTodos([...todos, { id: Math.random().toString(), text: text }])
   }
   return (
     <div className="App">
