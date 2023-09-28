@@ -3,6 +3,7 @@ import TodoList from './components/TodoList';
 import NewTodo from './components/NewTodo';
 import { Todo } from './todo.model';
 
+
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const todoAddHandler = (text: string) => {
